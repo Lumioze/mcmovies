@@ -1,0 +1,6 @@
+name: MCMovies
+version: ${project.version}
+main: creeper121.mcmovies.Main
+api-version: 1.16
+authors: [ Creeper121 ]
+description: Movies in minecraft!
