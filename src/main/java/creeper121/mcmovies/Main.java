@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 
 
 public final class Main extends JavaPlugin implements Listener {
@@ -20,6 +21,13 @@ public final class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
+
+        if(System.getProperty("sun.java2d.d3d").equalsIgnoreCase("true")) {
+            Properties properties = new Properties();
+            properties.setProperty("sun.java2d.transaccel", "True");
+            properties.setProperty("sun.java2d.ddforcevram", "True");
+            System.setProperties(properties);
+        }
     }
 
     @Override
@@ -34,13 +42,13 @@ public final class Main extends JavaPlugin implements Listener {
         view.addRenderer(new MapRenderer() {
             @Override
             public void render(MapView map, MapCanvas canvas, Player player) {
+                BufferedImage frame = null;
                 try {
-                    ImageIO.setUseCache(false);
-                    BufferedImage frame = ImageIO.read(new URL("http://127.0.0.1:5000"));
+                    frame = ImageIO.read(new URL("http://127.0.0.1:5000"));
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
                     canvas.drawImage(0, 0, frame);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
             }
         });
     }
